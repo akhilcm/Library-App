@@ -135,7 +135,7 @@ author=[{
     'Books': 'Life in Pieces'
 },{
     'name':'Sanya Khurana',
-    'picture':'/images/sanya-malhotr-aa_d.jpg.jpg',
+    'picture':'/images/sanya-malhotr-aa_d.jpg',
     'DoB':'18 November 1987',
     'Place':'Chandigarh, India',
     'Books': 'One Action'
@@ -148,7 +148,7 @@ author=[{
 },{
     'name':'ANUP KUMAR MANDAL',
     'picture':'/images/anup.jpeg',
-    'doB':'9 March 1984',
+    'DoB':'9 March 1984',
     'place':'India',
     'books': 'Firewall'
 }];
@@ -167,4 +167,6 @@ app.get('/authorsingle/:id',(req,res)=>{
 
 
 
-app.listen(3001);
+app.listen(process.env.PORT || 3001,()=>{
+    console.log("Server running on http://localhost:3001")
+});
