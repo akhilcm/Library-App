@@ -1,18 +1,26 @@
 const Express = require('express');
-var app=new Express();
-app.set('view engine','ejs');
+
+var app = new Express();
+
+app.set('view engine','ejs'); 
+
 app.use(Express.static(__dirname+"/public"));
 
+nav= [{
+    link:'/books',
+    title:'Books'
+},
+{
+    link:'/authors',
+    title:'Authors'
+}];
 app.get('/',(req,res)=>{
-    res.render('index',{nav:[{link:'/books',title:'books'},{
-        link:'/author',author:'author'}],title:'Library'});
-
+    res.render('index',{nav,title:'Library'});
 });
-app.get('/books',(req,res)=>{
-    res.render('books',book,{nav:[{link:'/books',title:'books'},{
-        link:'/author',author:'author'}],title:'books'});
-    });
 
+app.get('/books',(req,res)=>{
+    res.render('books',{book,title:'Books'});
+});
 book=[{
     'title': 'THE JURASSIC ADVENTURE',
     'author': 'ARHAM BANTHIA',
