@@ -1,8 +1,30 @@
 const Express = require('express');
+const Mongoose = require('mongoose');
+var request = require('request');
+const Addbooks=Mongoose.model("bookdetails",{
+    title: String ,
+    picture: String,
+    author: String,
+    publisher:String,
+    dop: String,
+    distributer: String,
+    price:String,
+    description: String});
+const Addauthor = Mongoose.model("authordetails",{
+        name:String,
+        picture:String,
+        DoB:String,
+        Place:String,
+        Books:String
+    });
 
+
+Mongoose.connect("mongodb://localhost:27017/bookdb"); 
+var bodyParser= require('body-parser');    
 var app = new Express();
-
 app.set('view engine','ejs'); 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 
 app.use(Express.static(__dirname+"/public"));
 
@@ -11,19 +33,35 @@ nav= [{
     title:'Books'
 },
 {
+    link:'/addbooks',
+    title:'AddBooks'
+},
+{
     link:'/authors',
     title:'Authors'
+},
+
+{
+    link:'/addauthors',
+    title:'AddAuthors'
 }];
 app.get('/',(req,res)=>{
     res.render('index',{nav,title:'Library'});
 });
 
-app.get('/books',(req,res)=>{
-    res.render('books',{book,title:'Books'});
-});
+// app.get('/books',(req,res)=>{
+//     res.render('books',{book,title:'Books'});
+// });
 
-app.get('/authors',(req,res)=>{
-    res.render('author',{author,title:'Author'});
+// app.get('/authors',(req,res)=>{
+//     res.render('author',{author,title:'Author'});
+// });
+
+app.get('/addbooks',(req,res)=>{
+    res.render('addbooks',{title:'AddBooks'});
+});
+app.get('/addauthors',(req,res)=>{
+    res.render('addauthors',{title:'AddAuthors'});
 });
 
 book=[{
@@ -110,7 +148,7 @@ book=[{
     'description': 'The story is truly a great example of a journey called ‘Life’',
     'picture':'/images/life in .jpg',
 },
-{
+{ 
     'title': 'Love-Tennis',
     'author': 'Jitender kumar',
     'publisher': 'Blue Rose',
@@ -152,21 +190,138 @@ author=[{
     'place':'India',
     'books': 'Firewall'
 }];
-app.get('/booksingle/:id',(req,res)=>{
-    const x= req.params.id;
-    res.render('booksmore',{books:book[x]});
+
+
+app.post('/read',(req,res)=>{
+    console.log(req.body);
+    var book= Addbooks(req.body);
+    var result = book.save( (error,data)=>{
+        if(error){
+            throw error;
+            res.send(error);
+        }
+        else{
+            res.send('user created');
+        }
+    });
 });
 
 
+app.get('/getdatas',(req,res)=>{
+    result = Addbooks.find( (error,data)=>{
+         if(error){
+             throw error;
+         }
+         else{
+             res.send(data);
+         }
+     });
+});
+const getdataApi="http://localhost:3001/getdatas";
+
+app.get('/books',(req,res)=>{
+    request(getdataApi,(error,response,body)=>{
+        var book=JSON.parse(body);
+        console.log(book);
+        res.render('books',{book,title:'Books'});
+
+    });
+});
+
+
+app.get('/bookone',(req,res)=>{
+    var item = req.query.q;
+    var result = Addbooks.findOne({_id:item},(error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+    });
+});
+const getdataApi1 = "http://localhost:3001/bookone";
+
+
+app.get('/booksingle/:id',(req,res)=>{
+    const x= req.params.id;
+    request(getdataApi1+"/?q="+x,(error,response,body)=>{
+        var book = JSON.parse(body);
+        console.log(book);
+        res.render('booksmore',{book:book});
+    });
+});
+
+app.post('/readdata',(req,res)=>{
+    console.log(req.body);
+    var author= Addauthor(req.body);
+    var result = author.save( (error,data)=>{
+        if(error){
+            throw error;
+            res.send(error);
+        }
+        else{
+            res.send('user created');
+        }
+    });
+});
+
+
+app.get('/getauthordatas',(req,res)=>{
+    result = Addauthor.find( (error,data)=>{
+         if(error){
+             throw error;
+             res.send(error);
+         }
+         else{
+             res.send(data);
+         }
+     });
+});
+const getdataApi3="http://localhost:3001/getauthordatas";
+
+app.get('/authors',(req,res)=>{
+    request(getdataApi3,(error,response,body)=>{
+        var author=JSON.parse(body);
+        console.log(author);
+        res.render('author',{author,title:'Authors'});
+
+    });
+});
+
+
+app.get('/authorone',(req,res)=>{
+    var item = req.query.q;
+    var result = Addauthor.findOne({_id:item},(error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+    });
+});
+const getdataApi4 = "http://localhost:3001/authorone";
+
 
 app.get('/authorsingle/:id',(req,res)=>{
-    const y= req.params.id;
-    res.render('authormore',{author:author[y]});
+    const x= req.params.id;
+    request(getdataApi4+"/?q="+x,(error,response,body)=>{
+        var author = JSON.parse(body);
+        console.log(author);
+        res.render('authormore',{author:author});
+    });
 });
 
 
 
 
 app.listen(process.env.PORT || 3001,()=>{
-    console.log("Server running on port: https://localhost:3001");
+    console.log("Server running on port: http://localhost:3001");
 });

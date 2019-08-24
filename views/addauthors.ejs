@@ -3,36 +3,26 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title>Library</title>
+		<title>LMS</title>
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-		<!--[if lt IE 9]>
-			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
+
 		<link href="css/styles.css" rel="stylesheet">
 	</head>
 	<body>
 <header class="navbar navbar-bright navbar-fixed-top" role="banner">
   <div class="container">
-    <nav class="collapse navbar-collapse" role="navigation">
+    <nav class="navbar-expand-sm" role="navigation">
       <ul class="nav navbar-nav">
             <% for(var i=0;i<nav.length;i++){ %>
                 <li>
                     <a href="<%= nav[i].link %>"><%= nav[i].title %></a>
                 </li>
             <% } %>
-      </ul>
-      <ul class="nav navbar-right navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search<i class="glyphicon glyphicon-search"></i></a>
-          <ul class="dropdown-menu" style="padding:12px;">
-            <form class="form-inline">
-              <button type="submit" class="btn btn-default pull-right"><i class="glyphicon glyphicon-search"></i></button><input type="text" class="form-control pull-left" placeholder="Search">
-            </form>
-          </ul>
-      
+
+     
     </nav>
   </div>
 </header>
@@ -41,13 +31,18 @@
   <div class="container">
     <div class="row">
       <div class="col-md-7">
-        <h1><%= title %>
+        <h1>Authors
           <p class="lead"></p>
         </h1>
       </div>
       <div class="col-md-5">
         <div class="well well-lg"> 
-         
+          <div class="row">
+            <div class="col-sm-12">
+              
+			
+            </div>
+          </div>
         </div>
       </div>
     </div> 
@@ -72,26 +67,16 @@
       <div class="panel">
         <div class="panel-body">
                 
-            <% for(var i=0;i<author.length;i++){ %>
-                <div class="row">    
-                    <br>
-                    <div class="col-md-2 col-sm-3 text-center">
-                      <a class="story-title" href="#"><img alt="" src="<%= author[i].picture %>" style="width:100px;height:100px" class="img-circle"></a>
-                    </div>
-                    <div class="col-md-10 col-sm-9">
-                      <h3><%= author[i].name %></h3>
-                      <div class="row">
-                        <div class="col-xs-9">
-                          <h4><%= author[i].DoB %></h4>
-                          <a href="/authorsingle/<%= author[i]._id  %>" class="btn btn-primary">Readmore...</a>
-                        </div>
-                        <div class="col-xs-3"></div>
-                      </div>
-                      <br><br>
-                    </div>
-                </div>
-                  <hr>     
-              <% } %>       
+                <form action="/readdata" method="POST">
+                    <table class="table">
+                        <tr><td>Author Name:</td><td><input type="text" name="name" class="form-control" id=""></td></tr>
+                        <tr><td>Image:</td><td><input type="text" name="picture" class="form-control" id=""></td></tr>
+                        <tr><td>DoB:</td><td><input type="date" name="DoB" class="form-control" id=""></td></tr>
+                        <tr><td>Place:</td><td><input type="text" name="Place" class="form-control" id=""></td></tr>
+                        <tr><td>Books:</td><td><textarea name="Books" id="" cols="40" rows="3"></textarea></td></tr>
+                        <tr><td></td><td><input type="submit" class="btn btn-primary" value="Submit"></td></tr>
+                    </table>
+                </form>
           
         </div>
       </div>
@@ -107,7 +92,7 @@
 <hr>
 
 <div class="container" id="footer">
-  
+ 
 </div>
 
 <hr>
