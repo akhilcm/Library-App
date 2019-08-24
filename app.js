@@ -33,17 +33,8 @@ nav= [{
     title:'Books'
 },
 {
-    link:'/addbooks',
-    title:'AddBooks'
-},
-{
     link:'/authors',
     title:'Authors'
-},
-
-{
-    link:'/addauthors',
-    title:'AddAuthors'
 }];
 app.get('/',(req,res)=>{
     res.render('index',{nav,title:'Library'});
