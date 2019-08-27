@@ -19,7 +19,8 @@ const Addauthor = Mongoose.model("authordetails",{
     });
 
 
-Mongoose.connect("mongodb://localhost:27017/bookdb"); 
+// Mongoose.connect("mongodb://localhost:27017/bookdb"); 
+Mongoose.connect("mongodb+srv://dbcm:dbcm@clustermy-zwohv.mongodb.net/bookdb?retryWrites=true&w=majority")
 var bodyParser= require('body-parser');    
 var app = new Express();
 app.set('view engine','ejs'); 
@@ -208,7 +209,7 @@ app.get('/getdatas',(req,res)=>{
          }
      });
 });
-const getdataApi="http://localhost:3001/getdatas";
+const getdataApi="https://libraryap.herokuapp.com/getdatas";
 
 app.get('/books',(req,res)=>{
     request(getdataApi,(error,response,body)=>{
@@ -234,7 +235,7 @@ app.get('/bookone',(req,res)=>{
         }
     });
 });
-const getdataApi1 = "http://localhost:3001/bookone";
+const getdataApi1 = "https://libraryap.herokuapp.com/bookone";
 
 
 app.get('/booksingle/:id',(req,res)=>{
@@ -272,7 +273,7 @@ app.get('/getauthordatas',(req,res)=>{
          }
      });
 });
-const getdataApi3="http://localhost:3001/getauthordatas";
+const getdataApi3="https://libraryap.herokuapp.com/getauthordatas";
 
 app.get('/authors',(req,res)=>{
     request(getdataApi3,(error,response,body)=>{
@@ -298,7 +299,7 @@ app.get('/authorone',(req,res)=>{
         }
     });
 });
-const getdataApi4 = "http://localhost:3001/authorone";
+const getdataApi4 = "https://libraryap.herokuapp.com/authorone";
 
 
 app.get('/authorsingle/:id',(req,res)=>{
