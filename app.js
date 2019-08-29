@@ -17,6 +17,17 @@ const Addauthor = Mongoose.model("authordetails",{
         Place:String,
         Books:String
     });
+const UserModel= Mongoose.model("users",{
+        ename:String,
+        eaddress:String,
+        egender:String,
+        edob:String,
+        eemail:String,
+        euname:String,
+        epass:String,
+        ecpass:String
+    });
+    
 
 
 // Mongoose.connect("mongodb://localhost:27017/bookdb"); 
@@ -28,6 +39,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
 app.use(Express.static(__dirname+"/public"));
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200' );
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 
 nav= [{
     link:'/books',
@@ -38,6 +67,9 @@ nav= [{
     title:'Authors'
 }];
 app.get('/',(req,res)=>{
+    res.render('login');
+});
+app.get('/index',(req,res)=>{
     res.render('index',{nav,title:'Library'});
 });
 
@@ -183,6 +215,100 @@ author=[{
     'books': 'Firewall'
 }];
 
+//login
+app.get('/loginAPI',(req,res)=>{
+    var item1 = req.query.euname;
+    var item2 = req.query.epass;
+    var result = UserModel.find({$and:[{euname:item1},{epass:item2}]},(error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+        
+    })
+
+})
+const APIurl5 = "https://libraryap.herokuapp.com/loginAPI"
+// const APIurl5 = "http://localhost:3001/loginAPI"
+
+app.post('/employeelogin',(req,res)=>{
+    var item1 = req.body.euname;
+    var item2 = req.body.epass;
+
+    request(APIurl5+"/?euname="+item1+"&&epass="+item2,(error,response,body)=>{
+        var data = JSON.parse(body);
+
+
+        console.log(data);
+        if(data.length>0){
+
+            if(item1==data[0].euname && item2==data[0].epass)
+            {
+                //res.send(data.euname);
+                res.send("<script>alert('Login Successfull')</script><script>window.location.href='/index'</script>");
+            }
+
+
+        }
+        else{
+            res.send("<script>alert('Login unSuccessfull')</script><script>window.location.href='/'</script>");
+            
+        }
+
+
+    });
+});
+
+//signup
+app.get('/register',(req,res)=>{
+    res.render('signup');
+});
+
+app.post('/employeeregister',(req,res)=>{
+    //var items=req.body;
+    //res.render('read',{item:items});
+
+    var user = new UserModel(req.body);
+    var result = user.save((error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send("<script>alert('User Successfully Inserted')</script><script>window.location.href='/register'</script>");
+        }
+    });
+
+});
+app.post('/employeeregister1',(req,res)=>{
+    //var items=req.body;
+    //res.render('read',{item:items});
+
+    var user = new UserModel(req.body);
+    var result = user.save((error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+    });
+
+});
+
+
+
+
 
 app.post('/read',(req,res)=>{
     console.log(req.body);
@@ -210,6 +336,8 @@ app.get('/getdatas',(req,res)=>{
      });
 });
 const getdataApi="https://libraryap.herokuapp.com/getdatas";
+// const getdataApi="http://localhost:3001/getdatas";
+
 
 app.get('/books',(req,res)=>{
     request(getdataApi,(error,response,body)=>{
@@ -236,6 +364,7 @@ app.get('/bookone',(req,res)=>{
     });
 });
 const getdataApi1 = "https://libraryap.herokuapp.com/bookone";
+// const getdataApi1 = "http://localhost:3001/bookone";
 
 
 app.get('/booksingle/:id',(req,res)=>{
@@ -274,6 +403,7 @@ app.get('/getauthordatas',(req,res)=>{
      });
 });
 const getdataApi3="https://libraryap.herokuapp.com/getauthordatas";
+// const getdataApi3="http://localhost:3001/getauthordatas";
 
 app.get('/authors',(req,res)=>{
     request(getdataApi3,(error,response,body)=>{
@@ -300,6 +430,7 @@ app.get('/authorone',(req,res)=>{
     });
 });
 const getdataApi4 = "https://libraryap.herokuapp.com/authorone";
+// const getdataApi4 = "http://localhost:3001/authorone";
 
 
 app.get('/authorsingle/:id',(req,res)=>{
