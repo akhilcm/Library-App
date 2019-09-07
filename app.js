@@ -233,8 +233,8 @@ app.get('/loginAPI',(req,res)=>{
     })
 
 })
-const APIurl5 = "https://libraryap.herokuapp.com/loginAPI"
-// const APIurl5 = "http://localhost:3001/loginAPI"
+// const APIurl5 = "https://libraryap.herokuapp.com/loginAPI"
+const APIurl5 = "http://localhost:3001/loginAPI"
 
 app.post('/employeelogin',(req,res)=>{
     var item1 = req.body.euname;
@@ -335,8 +335,8 @@ app.get('/getdatas',(req,res)=>{
          }
      });
 });
-const getdataApi="https://libraryap.herokuapp.com/getdatas";
-// const getdataApi="http://localhost:3001/getdatas";
+// const getdataApi="https://libraryap.herokuapp.com/getdatas";
+const getdataApi="http://localhost:3001/getdatas";
 
 
 app.get('/books',(req,res)=>{
@@ -363,8 +363,8 @@ app.get('/bookone',(req,res)=>{
         }
     });
 });
-const getdataApi1 = "https://libraryap.herokuapp.com/bookone";
-// const getdataApi1 = "http://localhost:3001/bookone";
+// const getdataApi1 = "https://libraryap.herokuapp.com/bookone";
+const getdataApi1 = "http://localhost:3001/bookone";
 
 
 app.get('/booksingle/:id',(req,res)=>{
@@ -402,8 +402,8 @@ app.get('/getauthordatas',(req,res)=>{
          }
      });
 });
-const getdataApi3="https://libraryap.herokuapp.com/getauthordatas";
-// const getdataApi3="http://localhost:3001/getauthordatas";
+// const getdataApi3="https://libraryap.herokuapp.com/getauthordatas";
+const getdataApi3="http://localhost:3001/getauthordatas";
 
 app.get('/authors',(req,res)=>{
     request(getdataApi3,(error,response,body)=>{
@@ -429,8 +429,8 @@ app.get('/authorone',(req,res)=>{
         }
     });
 });
-const getdataApi4 = "https://libraryap.herokuapp.com/authorone";
-// const getdataApi4 = "http://localhost:3001/authorone";
+// const getdataApi4 = "https://libraryap.herokuapp.com/authorone";
+const getdataApi4 = "http://localhost:3001/authorone";
 
 
 app.get('/authorsingle/:id',(req,res)=>{
@@ -441,8 +441,35 @@ app.get('/authorsingle/:id',(req,res)=>{
         res.render('authormore',{author:author});
     });
 });
+app.post('/viewauthorsingle',(req,res)=>{
+    const x = req.body.authorid;
+    var result = Addauthor.findOne({_id:x},(error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+    });
+});
 
-
+app.post('/viewbooksingle',(req,res)=>{
+    const x = req.body.bookid;
+    var result = Addbooks.findOne({_id:x},(error,data)=>{
+        if(error)
+        {
+            throw error;
+            res.send(error);
+        }
+        else
+        {
+            res.send(data);
+        }
+    });
+});
 
 
 app.listen(process.env.PORT || 3001,()=>{
